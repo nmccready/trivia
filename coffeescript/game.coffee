@@ -1,6 +1,6 @@
 Random = require 'random-js'
 
-Game = ->
+Game = (logger = console.log) ->
   players = new Array()
   places = new Array(6)
   purses = new Array(6)
@@ -45,47 +45,47 @@ Game = ->
     places[@howManyPlayers() - 1] = 0
     purses[@howManyPlayers() - 1] = 0
     inPenaltyBox[@howManyPlayers() - 1] = false
-    console.log playerName + " was added"
-    console.log "They are player number " + players.length
+    logger playerName + " was added"
+    logger "They are player number " + players.length
     true
 
   @howManyPlayers = ->
     players.length
 
   askQuestion = ->
-    console.log popQuestions.shift()  if currentCategory() is "Pop"
-    console.log scienceQuestions.shift()  if currentCategory() is "Science"
-    console.log sportsQuestions.shift()  if currentCategory() is "Sports"
-    console.log rockQuestions.shift()  if currentCategory() is "Rock"
+    logger popQuestions.shift()  if currentCategory() is "Pop"
+    logger scienceQuestions.shift()  if currentCategory() is "Science"
+    logger sportsQuestions.shift()  if currentCategory() is "Sports"
+    logger rockQuestions.shift()  if currentCategory() is "Rock"
 
   @roll = (roll) ->
-    console.log players[currentPlayer] + " is the current player"
-    console.log "They have rolled a " + roll
+    logger players[currentPlayer] + " is the current player"
+    logger "They have rolled a " + roll
     if inPenaltyBox[currentPlayer]
       unless roll % 2 is 0
         isGettingOutOfPenaltyBox = true
-        console.log players[currentPlayer] + " is getting out of the penalty box"
+        logger players[currentPlayer] + " is getting out of the penalty box"
         places[currentPlayer] = places[currentPlayer] + roll
         places[currentPlayer] = places[currentPlayer] - 12  if places[currentPlayer] > 11
-        console.log players[currentPlayer] + "'s new location is " + places[currentPlayer]
-        console.log "The category is " + currentCategory()
+        logger players[currentPlayer] + "'s new location is " + places[currentPlayer]
+        logger "The category is " + currentCategory()
         askQuestion()
       else
-        console.log players[currentPlayer] + " is not getting out of the penalty box"
+        logger players[currentPlayer] + " is not getting out of the penalty box"
         isGettingOutOfPenaltyBox = false
     else
       places[currentPlayer] = places[currentPlayer] + roll
       places[currentPlayer] = places[currentPlayer] - 12  if places[currentPlayer] > 11
-      console.log players[currentPlayer] + "'s new location is " + places[currentPlayer]
-      console.log "The category is " + currentCategory()
+      logger players[currentPlayer] + "'s new location is " + places[currentPlayer]
+      logger "The category is " + currentCategory()
       askQuestion()
 
   @wasCorrectlyAnswered = ->
     if inPenaltyBox[currentPlayer]
       if isGettingOutOfPenaltyBox
-        console.log "Answer was correct!!!!"
+        logger "Answer was correct!!!!"
         purses[currentPlayer] += 1
-        console.log players[currentPlayer] + " now has " + purses[currentPlayer] + " Gold Coins."
+        logger players[currentPlayer] + " now has " + purses[currentPlayer] + " Gold Coins."
         winner = didPlayerWin()
         currentPlayer += 1
         currentPlayer = 0  if currentPlayer is players.length
@@ -95,17 +95,17 @@ Game = ->
         currentPlayer = 0  if currentPlayer is players.length
         true
     else
-      console.log "Answer was correct!!!!"
+      logger "Answer was correct!!!!"
       purses[currentPlayer] += 1
-      console.log players[currentPlayer] + " now has " + purses[currentPlayer] + " Gold Coins."
+      logger players[currentPlayer] + " now has " + purses[currentPlayer] + " Gold Coins."
       winner = didPlayerWin()
       currentPlayer += 1
       currentPlayer = 0  if currentPlayer is players.length
       winner
 
   @wrongAnswer = ->
-    console.log "Question was incorrectly answered"
-    console.log players[currentPlayer] + " was sent to the penalty box"
+    logger "Question was incorrectly answered"
+    logger players[currentPlayer] + " was sent to the penalty box"
     inPenaltyBox[currentPlayer] = true
     currentPlayer += 1
     currentPlayer = 0  if currentPlayer is players.length
@@ -113,24 +113,23 @@ Game = ->
 
   @
 
-run = (seed = 0, engine = Random.engines.mt19937()) ->
+run = (logger = console.log, seed = 0, engine = Random.engines.mt19937()) ->
   engine.seed(seed)
 
   notAWinner = false
-  game = new Game()
+  game = new Game(logger)
   game.add "Chet"
   game.add "Pat"
   game.add "Sue"
   loop
-    game.roll Math.floor(Random.integer(0, 1000000)(engine) * 6) + 1
+    game.roll Math.floor(Random.integer(0, 1000)(engine) * 6) + 1
     if Math.floor(Math.random() * 10) is 7
       notAWinner = game.wrongAnswer()
     else
       notAWinner = game.wasCorrectlyAnswered()
     break unless notAWinner
 
-module.exports =
+module.exports = (logger = console.log) ->
+  run(logger)
   Game:Game
   run:run
-
-run()

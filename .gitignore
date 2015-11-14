@@ -4,3 +4,4 @@
 # an example. Thanks.
 *.log
 node_modules
+*.out

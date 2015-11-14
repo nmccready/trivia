@@ -4,14 +4,18 @@
   "description": "code retreat",
   "main": "game.coffee",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register game.spec.coffee",
-    "run": "coffee ./game.coffee"
+    "test": "mocha --compilers coffee:coffee-script/register ./spec/*.spec.coffee",
+    "start": "coffee ./game.coffee",
+    "e2e": "mocha --compilers coffee:coffee-script/register ./spec/e2e*"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.0.5",
     "chai": "^3.4.1",
     "mocha": "^2.3.3",
-    "should": "^7.1.1"
+    "random-js": "^1.0.8",
+    "should": "^7.1.1",
+    "through": "^2.3.8"
   }
 }

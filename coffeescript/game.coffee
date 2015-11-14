@@ -1,6 +1,6 @@
-exports = window ? global
+Random = require 'random-js'
 
-exports.Game = ->
+Game = ->
   players = new Array()
   places = new Array(6)
   purses = new Array(6)
@@ -113,15 +113,24 @@ exports.Game = ->
 
   @
 
-notAWinner = false
-game = new Game()
-game.add "Chet"
-game.add "Pat"
-game.add "Sue"
-loop
-  game.roll Math.floor(Math.random() * 6) + 1
-  if Math.floor(Math.random() * 10) is 7
-    notAWinner = game.wrongAnswer()
-  else
-    notAWinner = game.wasCorrectlyAnswered()
-  break unless notAWinner
+run = (seed = 0, engine = Random.engines.mt19937()) ->
+  engine.seed(seed)
+
+  notAWinner = false
+  game = new Game()
+  game.add "Chet"
+  game.add "Pat"
+  game.add "Sue"
+  loop
+    game.roll Math.floor(Random.integer(0, 1000000)(engine) * 6) + 1
+    if Math.floor(Math.random() * 10) is 7
+      notAWinner = game.wrongAnswer()
+    else
+      notAWinner = game.wasCorrectlyAnswered()
+    break unless notAWinner
+
+module.exports =
+  Game:Game
+  run:run
+
+run()

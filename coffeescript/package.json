@@ -1,0 +1,17 @@
+{
+  "name": "trivia",
+  "version": "0.0.0",
+  "description": "code retreat",
+  "main": "game.coffee",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register game.spec.coffee",
+    "run": "coffee ./game.coffee"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.3",
+    "should": "^7.1.1"
+  }
+}

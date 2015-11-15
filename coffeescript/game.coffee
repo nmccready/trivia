@@ -1,5 +1,3 @@
-Random = require 'random-js'
-
 Game = (logger = console.log) ->
   players = new Array()
   places = new Array(6)
@@ -113,8 +111,7 @@ Game = (logger = console.log) ->
 
   @
 
-run = (logger = console.log, seed = 0, engine = Random.engines.mt19937()) ->
-  engine.seed(seed)
+run = (logger = console.log, randomNumber = Math.random()) ->
 
   notAWinner = false
   game = new Game(logger)
@@ -122,7 +119,7 @@ run = (logger = console.log, seed = 0, engine = Random.engines.mt19937()) ->
   game.add "Pat"
   game.add "Sue"
   loop
-    game.roll Math.floor(Random.integer(0, 1000)(engine) * 6) + 1
+    game.roll Math.floor(randomNumber * 6) + 1
     if Math.floor(Math.random() * 10) is 7
       notAWinner = game.wrongAnswer()
     else

@@ -35,9 +35,3 @@ describe "Game",  ->
 
       it 'returns', ->
         @subject.add().should.be.ok
-
-
-
-
-
-describe "Your specs..." , ->

@@ -69,8 +69,8 @@ describe "Game e2e Seeded",  ->
     console.log "Generating Seed Files"
     runNum = 0
     while(runNum <= NUM_RUNS)
-      runNum += 1
       if(!_isBacked)
+        runNum += 1
         number = rndNumGen()
         fileObj = createFileLogger genFileName(number)
         @subject.run(fileObj.logger,number)
